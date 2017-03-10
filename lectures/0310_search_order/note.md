@@ -98,3 +98,23 @@ procedimento bubble_sort(ve)
 	} enquanto (troca == verdadeiro)
 }
 ```
+
+# PISA Questionnaire
+
+1. 1032
+1. 20
+1. 48
+1. 20
+1. CR7
+1. 900
+1. 75%
+1. 14
+1. 3/5
+1. 1400
+1. 30
+1. 620
+1. 4.50
+1. 8
+1. 1/10
+1. 10:45
+1. 2
