@@ -14,7 +14,7 @@
 * In-ordinary: search(l) -> print -> search(r) [below]
 * Pos-ordinary: search(l) -> search(r) -> print [right]
 
-# Ordenation Algorithms
+# Sorting Algorithms
 
 ## Selection Sort
 
@@ -54,7 +54,7 @@ public static void selectionSort(int[] v) {
 void insertionSort(int v[], int tam)
 {
 	int i, j, aux;
-	
+
 	for(i = 1; i < tam; i++)
 	{
 		j = 1;
