@@ -41,7 +41,7 @@ Must be sorted
 1. Create a table of indexes with size `10000/100 = 100`
 1. Copy 100 indexes with position `i*100` from the original array to the table of indexes
 1. Create a secondary table of indexes with size `100/10 = 10`
-1. Copy 10 index with position `i*10` from the firt table of indexes to the second table of indexes
+1. Copy 10 index with position `i*10` from the first table of indexes to the second table of indexes
 
 ## Issues
 
