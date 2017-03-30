@@ -2,17 +2,20 @@
 #include <stdio.h>
 #include <vector>
 
+#define PRIMARY_INDEX_RATIO 10
+
 using namespace std;
 
 bool has_three_arguments(int argc);
 void inform_number_of_elements_pattern();
+void inform_search_value_pattern();
 
 bool create_sorted_list(vector<long long> &sorted_elements, int quantity_of_elements);
 bool get_sorted_list_from_user(vector<long long> &sorted_elements, int quantity_of_elements);
 void create_automatic_sorted_list(vector<long long> &sorted_elements, int quantity_of_elements);
 
-bool create_primary_index_table(vector<long long> &primary_index, <long long> &sorted_elements);
-int sequential_search(vector<long long> &sorted_elements, long long search_value);
+bool create_primary_index_table(vector<long long> &primary_index, vector<long long> &sorted_elements);
+int sequential_search(vector<long long> &primary_index, vector<long long> &sorted_elements, long long search_value);
 
 int main(int argc, char* argv[])
 {
@@ -23,7 +26,7 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 
-	unsigned int quantity_of_elements = atoi(argv[1]);
+	int quantity_of_elements = atoi(argv[1]);
 
 	if(!create_sorted_list(sorted_elements, quantity_of_elements))
 	{
@@ -42,7 +45,15 @@ int main(int argc, char* argv[])
 
 	if(create_primary_index_table(primary_index, sorted_elements))
 	{
-		sequential_search(primary_index, sorted_elements, earch_value);
+		int search_index = sequential_search(primary_index, sorted_elements, search_value);
+		if(search_index != -1)
+		{
+			printf("ELEMENT FOUND - Position: %d; Value: %lld\n", search_index, search_value);
+		}
+		else
+		{
+			printf("ELEMENT NOT FOUND\n");
+		}
 	}
 
 	return 0;
@@ -135,6 +146,13 @@ bool get_sorted_list_from_user(vector<long long> &sorted_elements, int quantity_
 	if(sorted_elements.size() == 0)
 	{
 		has_elements = false;
+	} else
+	{
+		for(auto element : sorted_elements)
+		{
+			printf("[%lld]", element);
+		}
+		printf("\n");
 	}
 	return has_elements;
 }
@@ -147,7 +165,7 @@ bool get_sorted_list_from_user(vector<long long> &sorted_elements, int quantity_
  void create_automatic_sorted_list(vector<long long> &sorted_elements, int quantity_of_elements)
  {
 	 long long new_element = 1;
-	 for(int i = 0; i < quantity_of_elements; i++, new_element++)
+	 for(int i = 0; i < quantity_of_elements; ++i, ++new_element)
 	 {
 	 	sorted_elements.push_back(new_element);
 	 }
@@ -158,7 +176,26 @@ bool get_sorted_list_from_user(vector<long long> &sorted_elements, int quantity_
  */
 bool create_primary_index_table(vector<long long> &primary_index, vector<long long> &sorted_elements)
 {
+	bool need_primary_index_table = false;
 
+	int primary_index_size = sorted_elements.size()/PRIMARY_INDEX_RATIO;
+
+	if(primary_index_size != 0)
+	{
+		need_primary_index_table = true;
+		if(sorted_elements.size()%PRIMARY_INDEX_RATIO != 0)
+		{
+			++primary_index_size;
+		}
+
+		for(int i = 0; i < primary_index_size-1; ++i)
+		{
+			primary_index.push_back(sorted_elements[(i*PRIMARY_INDEX_RATIO)-1]);
+		}
+		primary_index.push_back(sorted_elements[sorted_elements.size()-1]);
+	}
+
+	return need_primary_index_table;
 }
 
 /*
@@ -166,5 +203,21 @@ bool create_primary_index_table(vector<long long> &primary_index, vector<long lo
  */
 int sequential_search(vector<long long> &primary_index, vector<long long> &sorted_elements, long long search_value)
 {
-
+	int size_primary = primary_index.size();
+	int aux,auxSorted;
+	for(aux=0; aux< size_primary; aux++){
+		if(!(primary_index[aux] < search_value)){
+			break;
+		}
+	}
+	aux = aux*PRIMARY_INDEX_RATIO;
+	for(auxSorted =0; auxSorted < 10; aux++){
+		if(sorted_elements[aux] == search_value)
+		{
+			return aux;
+		}
+		if(sorted_elements[aux] > search_value)
+			return -1;
+	}
+	return -1;
 }
