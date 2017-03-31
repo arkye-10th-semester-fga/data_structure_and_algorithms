@@ -21,7 +21,7 @@ void inform_number_of_elements_pattern()
  */
 void inform_search_value_pattern()
 {
-	printf("<search_value> must be between 1 and <number_of_elements>\n");
+	printf("<search_value> must be between 1 and 1 000 000 000\n");
 }
 
 /*
@@ -30,6 +30,7 @@ void inform_search_value_pattern()
 void inform_stress_loop_pattern()
 {
 	printf("<stress_loop> must be between 1 and 1 000 000 000\n");
+	printf("Application will perform only one output, at the end of the stress loop\n");
 }
 
 /*

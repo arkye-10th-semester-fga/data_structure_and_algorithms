@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <vector>
-#include "ordered_list_creator.h"
+#include "sorted_list_creator.h"
 
 using namespace std;
 
@@ -33,7 +33,7 @@ bool create_sorted_list(vector<long long> &sorted_elements, int quantity_of_elem
 /*
  * Get Sorted List from User
  * A new element must be greater than 0
- * A new element must be lesser than the previous element
+ * A new element must be greater or equals than the previous element
  * return false if no element created, otherwise true
  */
 bool get_sorted_list_from_user(vector<long long> &sorted_elements, int quantity_of_elements)
@@ -44,7 +44,7 @@ bool get_sorted_list_from_user(vector<long long> &sorted_elements, int quantity_
 	long long new_element;
 	while(scanf("%lld", &new_element) == 1 && new_element > 0)
 	{
-		if(previous_element <= new_element)
+		if(previous_element <= new_element && new_element < 1000000000)
 		{
 			sorted_elements.push_back(new_element);
 			previous_element = new_element;
@@ -53,7 +53,8 @@ bool get_sorted_list_from_user(vector<long long> &sorted_elements, int quantity_
 	if(sorted_elements.size() == 0)
 	{
 		has_elements = false;
-	} else
+	}
+	else
 	{
 		for(auto element : sorted_elements)
 		{
@@ -71,9 +72,9 @@ bool get_sorted_list_from_user(vector<long long> &sorted_elements, int quantity_
  */
 void create_automatic_sorted_list(vector<long long> &sorted_elements, int quantity_of_elements)
 {
- long long new_element = 1;
- for(int i = 0; i < quantity_of_elements; ++i, ++new_element)
- {
- 	sorted_elements.push_back(new_element);
- }
+	long long new_element = 1;
+	for(int i = 0; i < quantity_of_elements; ++i, ++new_element)
+	{
+		sorted_elements.push_back(new_element);
+	}
 }
