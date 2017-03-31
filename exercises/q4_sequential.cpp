@@ -2,105 +2,139 @@
 #include <stdio.h>
 #include <vector>
 #include "input.h"
-#include "ordered_list_creator.h"
+#include "sorted_list_creator.h"
 
 #define PRIMARY_INDEX_RATIO 10
+#define NOT_FOUND -1
 
 using namespace std;
 
-bool create_primary_index_table(vector<long long> &primary_index, vector<long long> &sorted_elements);
-int sequential_search(vector<long long> &primary_index, vector<long long> &sorted_elements, long long search_value);
+void create_primary_index_table(vector<long long> &primary_indexes, vector<long long> &sorted_elements);
+int find_primary_index(vector<long long> &primary_indexes, long long search_value);
+int sequential_search(vector<long long> &sorted_elements, long long search_value, int initial_index);
 
 int main(int argc, char* argv[])
 {
-	vector<long long> sorted_elements;
-
+	// Check Arguments Quantity
 	if(!has_four_arguments(argc))
 	{
 		exit(1);
 	}
 
+	// Create Sorted List
 	int quantity_of_elements = atoi(argv[1]);
-
+	vector<long long> sorted_elements;
 	if(!create_sorted_list(sorted_elements, quantity_of_elements))
 	{
+		inform_number_of_elements_pattern();
 		exit(1);
 	}
 
+	// Verify Search Value
 	long long search_value = atoll(argv[2]);
-
 	if(search_value < 1 || search_value > quantity_of_elements)
 	{
 		inform_search_value_pattern();
 		exit(1);
 	}
 
-	vector<long long> primary_index;
+	// Create Primary Index Table
+	vector<long long> primary_indexes;
+	create_primary_index_table(primary_indexes, sorted_elements);
 
-	if(create_primary_index_table(primary_index, sorted_elements))
+
+	// Perform Stress Loop
+	long long stress_count = atoll(argv[3]);
+	while(stress_count > 0)
 	{
-		int search_index = sequential_search(primary_index, sorted_elements, search_value);
-		if(search_index != -1)
+		// Find Primary Index
+		int search_index = find_primary_index(primary_indexes, search_value);
+
+		// Find Element
+		search_index = sequential_search(sorted_elements, search_value, search_index);
+
+		if(stress_count == 1)
 		{
-			printf("ELEMENT FOUND - Position: %d; Value: %lld\n", search_index, search_value);
+			if(search_index != NOT_FOUND)
+			{
+				printf("ELEMENT FOUND - Position: %d; Value: %lld\n", search_index, search_value);
+			}
+			else
+			{
+				printf("ELEMENT NOT FOUND\n");
+			}
 		}
-		else
-		{
-			printf("ELEMENT NOT FOUND\n");
-		}
+
+		stress_count--;
 	}
 
 	return 0;
 }
 
 /*
- *
+ * Create Primary Index Table With n/10 elements from the sorted elements
+ * I = l + l+10 + ... l+(10*(n-1)) + k
+ * l = 1, k = last element of the sorted elements
  */
-bool create_primary_index_table(vector<long long> &primary_index, vector<long long> &sorted_elements)
+void create_primary_index_table(vector<long long> &primary_indexes, vector<long long> &sorted_elements)
 {
-	bool need_primary_index_table = false;
-
 	int primary_index_size = sorted_elements.size()/PRIMARY_INDEX_RATIO;
 
-	if(primary_index_size != 0)
+	primary_indexes.push_back(sorted_elements[0]);
+
+	for(int i = 1; i <= primary_index_size; ++i)
 	{
-		need_primary_index_table = true;
-
-		if(sorted_elements.size()%PRIMARY_INDEX_RATIO != 0)
-		{
-			++primary_index_size;
-		}
-
-		for(int i = 0; i < primary_index_size-1; ++i)
-		{
-			primary_index.push_back(sorted_elements[(i*PRIMARY_INDEX_RATIO)-1]);
-		}
-		primary_index.push_back(sorted_elements[sorted_elements.size()-1]);
+		primary_indexes.push_back(sorted_elements[(i*PRIMARY_INDEX_RATIO)-1]);
 	}
 
-	return need_primary_index_table;
+	if(sorted_elements.size() % PRIMARY_INDEX_RATIO != 0)
+	{
+		primary_indexes.push_back(sorted_elements[sorted_elements.size()-1]);
+	}
 }
 
 /*
- *
+ * Find the primary index based on search value
  */
-int sequential_search(vector<long long> &primary_index, vector<long long> &sorted_elements, long long search_value)
+int find_primary_index(vector<long long> &primary_indexes, long long search_value)
 {
-	int size_primary = primary_index.size();
-	int aux,auxSorted;
-	for(aux=0; aux< size_primary; aux++){
-		if(!(primary_index[aux] < search_value)){
-			break;
-		}
-	}
-	aux = aux*PRIMARY_INDEX_RATIO;
-	for(auxSorted =0; auxSorted < 10; aux++){
-		if(sorted_elements[aux] == search_value)
+	int index;
+	const int SIZE_OF_PRIMARY_INDEXES = primary_indexes.size();
+
+	bool search_value_is_lesser_or_equals_element = false;
+	for(index = 0; !search_value_is_lesser_or_equals_element &&
+		index < SIZE_OF_PRIMARY_INDEXES; ++index)
+	{
+		if(search_value <= primary_indexes[index])
 		{
-			return aux;
+			search_value_is_lesser_or_equals_element = true;
 		}
-		if(sorted_elements[aux] > search_value)
-			return -1;
 	}
-	return -1;
+
+	return (index-1)*PRIMARY_INDEX_RATIO-1;
+}
+
+
+/*
+ * Perform the Sequential Search, Initiating from the index defined by the
+ * Primary Index Table
+ */
+int sequential_search(vector<long long> &sorted_elements, long long search_value, int initial_index)
+{
+	int index;
+	const int SIZE_OF_SORTED_ELEMENTS = sorted_elements.size();
+	for(index = initial_index; index < SIZE_OF_SORTED_ELEMENTS; ++index)
+	{
+		if(sorted_elements[index] == search_value)
+		{
+			return index;
+		}
+
+		if(sorted_elements[index] > search_value)
+		{
+			return NOT_FOUND;
+		}
+	}
+
+	return NOT_FOUND;
 }
