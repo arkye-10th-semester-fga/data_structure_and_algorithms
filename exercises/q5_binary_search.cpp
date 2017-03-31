@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <vector>
 #include "input.h"
-#include "ordered_list_creator.h"
+#include "sorted_list_creator.h"
 
 using namespace std;
 
@@ -25,7 +25,6 @@ int main(int argc, char* argv[])
 	long long search_value = atoll(argv[2]);
 
 	printf("Binary search: %d\n",binary_search(sorted_elements,search_value)+1);
-
 
 	return 0;
 }
