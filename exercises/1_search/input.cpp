@@ -11,9 +11,27 @@ void inform_number_of_elements_pattern()
 {
 	printf("<number_of_elements> must be between 10 and 1 000 000\n");
 	printf("If you want to set your own elements,\n");
-	printf("inform <number_of_elements> as 0. Remember:\n");
-	printf("a new element must be greater than 0 and lesser \n");
-	printf("than the previous element\n");
+	printf("inform <number_of_elements> as 0.\n");
+}
+
+/*
+ * Inform how the program expect to receive the sorted insertion of elements
+ */
+void inform_sorted_insertion_pattern()
+{
+	printf("Remember: a new element must be greater than 0 and lesser\n");
+	printf("than the previous element.\n");
+}
+
+/*
+ * Inform how the program expect to receive the circular insertion of elements
+ */
+void inform_circular_insertion_pattern()
+{
+	printf("Remember: a new element must be greater than 0 and, once a\n");
+	printf("new element is lesser than the previous element, all the next\n");
+	printf("new elements must be greater than the previous element and\n");
+	printf("lesser than the highest element inserted.\n");
 }
 
 /*
@@ -44,9 +62,6 @@ bool has_four_arguments(int argc)
 	if(argc != 4)
 	{
 		printf("Input Expected: ./<program_name> <number_of_elements> <search_value> <stress_loop>\n");
-		inform_number_of_elements_pattern();
-		inform_search_value_pattern();
-		inform_stress_loop_pattern();
 		has_four_arguments = false;
 	}
 	return has_four_arguments;
