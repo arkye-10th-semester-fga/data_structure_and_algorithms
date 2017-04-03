@@ -1,6 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "input.h"
+#include <time.h>
+#include "io.h"
+
+#define NOT_FOUND -1
 
 using namespace std;
 
@@ -65,4 +68,27 @@ bool has_four_arguments(int argc)
 		has_four_arguments = false;
 	}
 	return has_four_arguments;
+}
+
+/*
+ * Inform the search result to the user
+ */
+void print_result(int search_index, long long search_value)
+{
+	if(search_index != NOT_FOUND)
+	{
+		printf("Element \"%lld\" found at position \"%d\"!\n", search_value, search_index+1);
+	}
+	else
+	{
+		printf("Element \"%lld\" NOT found!\n", search_value);
+	}
+}
+
+/*
+ * Inform the time elapsed from the start of the stress loop until its end
+ */
+void print_time(clock_t start_time, clock_t end_time)
+{
+	printf("Time on Stress Loop: %lf s\n", (double) (end_time - start_time)/CLOCKS_PER_SEC);
 }

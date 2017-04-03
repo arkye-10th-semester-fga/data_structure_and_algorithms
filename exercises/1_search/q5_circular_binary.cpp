@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 #include <vector>
-#include "input.h"
+#include "io.h"
 #include "list_creator.h"
 
 #define BILLION 1000000000
@@ -52,6 +53,7 @@ int main(int argc, char* argv[])
 
 	// Perform Stress Loop
 	int search_index = 0;
+	clock_t start_time = clock();
 	while(stress_count > 0)
 	{
 		// Find Element
@@ -59,17 +61,11 @@ int main(int argc, char* argv[])
 
 		stress_count--;
 	}
+	clock_t end_time = clock();
 
 	// Inform Results
-	if(search_index != NOT_FOUND)
-	{
-		printf("ELEMENT FOUND - Position: %d; Value: %lld\n",
-			search_index+1, search_value);
-	}
-	else
-	{
-		printf("ELEMENT NOT FOUND\n");
-	}
+	print_result(search_index, search_value);
+	print_time(start_time, end_time);
 
 	return 0;
 }

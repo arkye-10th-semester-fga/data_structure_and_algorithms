@@ -3,6 +3,10 @@
 #include <vector>
 #include "list_creator.h"
 
+#define MILLION 1000000
+#define BILLION 1000000000
+#define USER_CHOICE 0
+
 using namespace std;
 
 /*
@@ -12,14 +16,14 @@ using namespace std;
 bool create_sorted_list(vector<long long> &sorted_elements, int quantity_of_elements)
 {
 	bool is_creation_successful = true;
-	if(quantity_of_elements == 0) // User chose to insert elements
+	if(quantity_of_elements == USER_CHOICE) // User chose to insert elements
 	{
 		if(!get_sorted_list_from_user(sorted_elements, quantity_of_elements))
 		{
 			is_creation_successful = false;
 		}
 	}
-	else if(quantity_of_elements >= 10) // User chose to program create elements
+	else if(quantity_of_elements >= 10 && quantity_of_elements <= MILLION) // User chose to program create elements
 	{
 		create_automatic_sorted_list(sorted_elements, quantity_of_elements);
 	}
@@ -44,7 +48,7 @@ bool get_sorted_list_from_user(vector<long long> &sorted_elements, int quantity_
 	long long new_element;
 	while(scanf("%lld", &new_element) == 1 && new_element > 0)
 	{
-		if(previous_element <= new_element && new_element < 1000000000)
+		if(previous_element <= new_element && new_element < BILLION)
 		{
 			sorted_elements.push_back(new_element);
 			previous_element = new_element;
@@ -86,7 +90,7 @@ void create_automatic_sorted_list(vector<long long> &sorted_elements, int quanti
 bool create_circular_list(vector<long long> &circular_list, int quantity_of_elements)
 {
 	bool is_creation_successful = true;
-	if(quantity_of_elements == 0) // User chose to insert elements
+	if(quantity_of_elements == USER_CHOICE) // User chose to insert elements
 	{
 		if(!get_circular_list_from_user(circular_list, quantity_of_elements))
 		{
@@ -124,14 +128,14 @@ bool get_circular_list_from_user(vector<long long> &circular_list, int quantity_
 	{
 		if(highest_element == 0)
 		{
-			if(new_element < 1000000000)
+			if(new_element < BILLION)
 			{
 				circular_list.push_back(new_element);
 				if(previous_element > new_element)
 				{
 					highest_element = previous_element;
-					previous_element = new_element;
 				}
+				previous_element = new_element;
 			}
 		}
 		else
@@ -143,6 +147,7 @@ bool get_circular_list_from_user(vector<long long> &circular_list, int quantity_
 			}
 			else
 			{
+				printf("Minimum value allowed is %lld\n", previous_element);
 				printf("Maximum value allowed is %lld\n", highest_element-1);
 				printf("To finish the insertion, insert the value 0\n");
 			}

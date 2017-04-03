@@ -1,0 +1,38 @@
+g++ -std=c++14 -O2 -lm -Wall q6_interpolation.cpp io.cpp list_creator.cpp -o q6_interpolation
+LAST ELEMENT BILLION STRESS TEST
+./q6_interpolation 10 10 1000000000
+Element "10" found at position "10"!
+Time on Stress Loop: 10.868462 s
+================================
+./q6_interpolation 25 25 1000000000
+Element "25" found at position "25"!
+Time on Stress Loop: 10.873401 s
+================================
+./q6_interpolation 50 50 1000000000
+Element "50" found at position "50"!
+Time on Stress Loop: 10.942678 s
+================================
+./q6_interpolation 100 100 1000000000
+Element "100" found at position "100"!
+Time on Stress Loop: 10.817046 s
+================================
+./q6_interpolation 500 500 1000000000
+Element "500" found at position "500"!
+Time on Stress Loop: 10.972833 s
+================================
+./q6_interpolation 1000 1000 1000000000
+Element "1000" found at position "1000"!
+Time on Stress Loop: 10.876480 s
+================================
+./q6_interpolation 10000 10000 1000000000
+Element "10000" found at position "10000"!
+Time on Stress Loop: 10.921310 s
+================================
+./q6_interpolation 100000 100000 1000000000
+Element "100000" found at position "100000"!
+Time on Stress Loop: 10.930393 s
+================================
+./q6_interpolation 1000000 1000000 1000000000
+Element "1000000" found at position "1000000"!
+Time on Stress Loop: 10.834013 s
+================================

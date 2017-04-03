@@ -1,7 +1,11 @@
 **Aluno**: Jonathan Henrique Maia de Moraes (12/0122553)
-**Aluno**: Laércio (/)
+
+**Aluno**: Laércio (13/0119105)
+
 **Disciplina**: Estrutura de Dados e Algoritmos 2
+
 **Professor**: Maurício Serrano
+
 **Data**: 03/04/2017
 
 # Lista 1
@@ -29,7 +33,9 @@
 		1. O valor do mensageiro foi considerado duas vezes no enunciado, pois a parcela extraviada do mensageiro está incluso nos R$ 27,00 pago. Se você desconsiderar a devolução de R$ 1,00 para cada cliente, o valor total de transação se torna R$ 27,00. Se você desconsiderar o extravio do mensageiro, o valor total de transação se torna R$ 25,00, que é justamente o valor retido pelo gerente, e não R$ 29,00.
 
 1. Com base no código da busca sequencial, evolua o código para uma busca sequencial com índice primário.
-	* **R**: Código completo no arquivo `q4_sequential.cpp`
+	* **R**:
+		* Código completo no arquivo `q4_sequential.cpp`
+		* Compilar o código via makefile: `make q4`
 
 	```C++
 	/*
@@ -116,7 +122,9 @@
 	```
 
 1. Com base no código da busca binária, desenvolva a mesma idéia em uma lista em anel.
-	* **R**: Código completo no arquivo `q5_circular_binary.cpp`
+	* **R**:
+		* Código completo no arquivo `q5_circular_binary.cpp`
+		* Compilar o código via makefile: `make q5`
 
 	```C++
 	/*
@@ -189,7 +197,15 @@
 	```
 
 1. Modifique o código da busca binária, trocando o cálculo dos índices inferiores e superiores de modo a obter uma busca por interpolação. Utilize o cálculo dado em sala. Teste o tempo gasto pela busca para encontrar um valor em um vetor de 10, 25, 50, 100, 500, mil, dez mil, cem mil e um milhão de posições. A taxa de crescimento é ou não é da ordem de log(log(n))?
-	* **R**: Código completo no arquivo `q6_interpolation.cpp`
+	* **R**:
+		* Código completo no arquivo `q6_interpolation.cpp`
+		* Compilar o código via makefile: `make q6`
+		* Executar caso de teste de extremo: `make test6`
+			* Dados do teste realizado no arquivo `t6.out`
+		* Executar caso de teste de extremo (início): `make test6a`
+			* Dados do teste realizado no arquivo `t6a.out`
+		* Executar caso de teste de valor fixo: `make test6b`
+			* Dados do teste realizado no arquivo `t6b.out`
 
 	```C++
 	/*
@@ -241,20 +257,18 @@
 	}
 	```
 
-	* Foi considerado o caso de teste de extremo: O valor pesquisado é sempre o último elemento da lista. É possível identificar claramente a eficiência do algoritmo, muito próximo do comportamento constante de uma função `log(log(x))` (como consta na [figura 1.1](figures/1.jpg)) Para calcular o tempo médio, foi utilizado da metodlogia do _loop_ de estresse na escala de 1 bilhão. Os resultados podem ser vistos na [figura 1.2](figures/2.png) e na tabela abaixo:
+	* Considerando o caso de teste de extremo onde o valor pesquisado é sempre o último elemento da lista, é possível identificar claramente a eficiência do algoritmo, muito próximo do comportamento constante de uma função `log(log(x))` (como consta na [figura 1.1](figures/1.jpg)) Para calcular o tempo médio, foi utilizado da metodlogia do _loop_ de estresse na escala de 1 bilhão. Os resultados podem ser vistos na tabela abaixo:
 
 | Tamanho da Lista | Valor Pesquisado | Resultado Real | Resultado Unidade |
 |:----------------:|:----------------:|:--------------:|:-----------------:|
-| 10 | 10 | 10.35s | ~104 ns |
-| 25 | 25 | 10.36s | ~104 ns |
-| 50 | 50 | 10.57s | ~106 ns |
-| 100 | 100 | 10.68s | ~107 ns |
-| 500 | 500 | 10.52s | ~106 ns |
-| 10^3 | 10^3 | 10.47s | ~105 ns |
-| 10^4 | 10^4 | 10.50s | ~105 ns |
-| 10^5 | 10^5 | 10.51s | ~105 ns |
-| 10^6 | 10^6 | 10.39s | ~104 ns |
+| 10 | 10 | 10.868s | ~109 ns |
+| 25 | 25 | 10.873s | ~109 ns |
+| 50 | 50 | 10.943s | ~109 ns |
+| 100 | 100 | 10.817s | ~108 ns |
+| 500 | 500 | 10.973s | ~110 ns |
+| 10^3 | 10^3 | 10.876s | ~109 ns |
+| 10^4 | 10^4 | 10.921s | ~109 ns |
+| 10^5 | 10^5 | 10.930s | ~109 ns |
+| 10^6 | 10^6 | 10.834s | ~108 ns |
 
 ![Função log(log(x))](figures/1.jpg)
-
-![Função log(log(x))](figures/2.png)
