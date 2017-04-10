@@ -1,0 +1,32 @@
+---- Questões lógicas de EDA 2 ----
+Questão 1 - Resposta:
+
+O terceiro "Islander" falou que pertence a mesma ilha dos outros dois. Por meio
+das seguintes deduções(V- se refere a ilha que falam a verdade, M- A que falam a
+mentira):
+
+O primeiro falou que os outros dois(1 e 2) pertencem a mesma ilha (V ou M). Ele
+pode estar falando a verdade ou pode estar mentido.
+
+O segundo falou a mesma coisa do primeiro, que os outros dois (3 e 1) pertencem a
+mesma ilha (V ou M). Mas ele também pode estar mentindo ou falando a verdade.
+
+Implicações: o primeiro fala a verdade ou mentira, mas ele fala na mesma
+categoria do segundo. Ou seja, se o primeiro fala a verdade, o segundo também 
+fala, ou se o primeiro fala a mentira. O terceiro é implicação lógica dos dois
+primeiros. Se ambos falam a verdade o terceiro também falará, se ambos falam a
+mentira o terceiro também falará. Logo o terceiro falará a mesma coisa que os
+antecessores.
+
+
+Questão 2 - Resposta:
+
+Se caso a pessoa queimar as duas extremidades da primeira corda ao mesmo tempo,
+quando a corda estiver totalmente queimada terá se passado meia hora,
+visto que ela demora 1 hora para queima com uma chama em apenas uma extremidade.
+Se caso a pessoa acender apenas uma extremidade da corda ao mesmo tempo que
+acendeu as duas extremidades da primeira corda. A primeira corda não existirá,
+a segunda corda terá queimado o equivalente a meia hora, se caso acender a outra
+ extremidade da segunda corda ser queimada no mesmo momento que a primeira corda
+  tiver sido totalmente queimada, no memonto exato que a segunda corda terminar
+  de queimar terá se passado exatos 45 minutos.
