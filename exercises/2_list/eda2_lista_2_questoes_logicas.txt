@@ -30,3 +30,10 @@ a segunda corda terá queimado o equivalente a meia hora, se caso acender a outr
  extremidade da segunda corda ser queimada no mesmo momento que a primeira corda
   tiver sido totalmente queimada, no memonto exato que a segunda corda terminar
   de queimar terá se passado exatos 45 minutos.
+
+Questão 3 - Resposta:
+
+O filósofo que parou de rir constatou que a única situação possível em que fizesse todos os três filósofos rirem sem parar seria se todos os três estivessem com o presente na cabeça."
+Se só um estivesse com o presente, o presenteado não riria enquanto os outros dois ririam.
+Se dois dos três estivessem com o presente, todos ririam, mas um dos presentados certamente perguntaria: "Porque ele está rindo se é ele que está presenteado?", e certamente pararia de rir.
+Como todos os três riram, e nenhum deles pararam de rir, o filósofo concluiu que ele certamente estava presenteado.
