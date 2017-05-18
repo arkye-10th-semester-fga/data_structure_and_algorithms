@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
@@ -38,10 +37,10 @@ public:
 		cout << "Student #" << id << ": ";
 		cout << begin_week_day << " ";
 		cout << begin_week_hours << " ";
-		cout << print_am_or_pm(begin_hours_is_am) << " ";
+		cout << get_string_am_or_pm(begin_hours_is_am) << " ";
 		cout << end_week_day << " ";
 		cout << end_week_hours << " ";
-		cout << print_am_or_pm(end_hours_is_am) << endl;
+		cout << get_string_am_or_pm(end_hours_is_am) << endl;
 	}
 
 private:
@@ -83,7 +82,7 @@ private:
 	{
 		unsigned int hours;
 		bool is_am;
-		if(from_end)
+		if(!from_end)
 		{
 			hours = begin_week_hours;
 			is_am = begin_hours_is_am;
@@ -96,7 +95,7 @@ private:
 		return is_am ? hours : hours + 12;
 	}
 
-	string print_am_or_pm(bool is_am)
+	string get_string_am_or_pm(bool is_am)
 	{
 		return is_am ? "AM" : "PM";
 	}
@@ -107,6 +106,11 @@ void create_supervising_committee(vector<student> &shifts,
 	vector<student> &committee);
 void show_committee(vector<student> &committee);
 bool intersects(student s1, student s2);
+student get_earliest_end_time_student(vector<student> &shifts);
+student get_latest_end_time_student(vector<student> &shifts,
+	student earliest_end_time_student);
+unsigned int mark_all_intersected_students(vector<student> &shifts,
+	student latest_end_time_student);
 
 int main()
 {
@@ -123,35 +127,55 @@ int main()
 
 void create_shifts(vector<student> &shifts)
 {
-	cout << "Inform each student shift" << endl;
+	const string END_OF_INPUT = "0";
+	const string AM = "AM";
+
+	cout << "Inform each student shift. End the input with a 0." << endl;
+
 	unsigned int id = 0;
-	string begin_week_day;
-	unsigned int begin_week_hours;
-	string begin_am_or_pm;
-	string end_week_day;
-	unsigned int end_week_hours;
-	string end_am_or_pm;
-	while(cin >> begin_week_day
-		>> begin_week_hours
-		>> begin_am_or_pm
-		>> end_week_day
-		>> end_week_hours
-		>> end_am_or_pm)
+	bool has_finished = false;
+
+	while(!has_finished)
 	{
-		++id;
-		bool begin_hours_is_am = false;
-		if(begin_am_or_pm == "AM")
+		string begin_week_day;
+		unsigned int begin_week_hours;
+		string begin_am_or_pm;
+
+		string end_week_day;
+		unsigned int end_week_hours;
+		string end_am_or_pm;
+
+		cin >> begin_week_day;
+		if(begin_week_day != END_OF_INPUT)
 		{
-			begin_hours_is_am = true;
+			cin >> begin_week_hours
+			>> begin_am_or_pm
+			>> end_week_day
+			>> end_week_hours
+			>> end_am_or_pm;
+
+			++id;
+
+			bool begin_hours_is_am = false;
+			if(begin_am_or_pm == AM)
+			{
+				begin_hours_is_am = true;
+			}
+
+			bool end_hours_is_am = false;
+			if(end_am_or_pm == AM)
+			{
+				end_hours_is_am = true;
+			}
+
+			shifts.push_back(student(id, begin_week_day,
+				begin_week_hours, begin_hours_is_am, end_week_day,
+				end_week_hours, end_hours_is_am));
 		}
-		bool end_hours_is_am = false;
-		if(end_am_or_pm == "AM")
+		else
 		{
-			end_hours_is_am = true;
+			has_finished = true;
 		}
-		shifts.push_back(student(id, begin_week_day,
-			begin_week_hours, begin_hours_is_am, end_week_day,
-			end_week_hours, end_hours_is_am));
 	}
 }
 
@@ -159,51 +183,17 @@ void create_supervising_committee(vector<student> &shifts,
 	vector<student> &committee)
 {
 	unsigned int marks = 0;
-	while(marks != shifts.size())
+	while(marks < shifts.size())
 	{
-		student *earliest_end_time_student;
-		unsigned int earliest_end_time = 169;
-		for(student s : shifts)
-		{
-			if(!s.is_marked)
-			{
-				if(earliest_end_time > s.end_hours)
-				{
-					earliest_end_time_student = &s;
-					earliest_end_time = s.end_hours;
-				}
-			}
-		}
-		student *latest_end_time_student;
-		unsigned int latest_end_time = 0;
-		for(student s : shifts)
-		{
-			if(intersects(*earliest_end_time_student, s))
-			{
-				if(latest_end_time < s.end_hours)
-				{
-					latest_end_time_student = &s;
-					latest_end_time = s.end_hours;
-				}
-			}
-		}
-		for(student s : shifts)
-		{
-			if(intersects(*latest_end_time_student, s))
-			{
-				if(!s.is_marked)
-				{
-					++marks;
-					s.is_marked = true;
-				}
-			}
-		}
-		if(!latest_end_time_student->is_marked)
-		{
-			shifts[latest_end_time_student->id-1].is_marked = true;
-			++marks;
-			committee.push_back(*latest_end_time_student);
-		}
+		student earliest_end_time_student =
+			get_earliest_end_time_student(shifts);
+
+		student latest_end_time_student =
+			get_latest_end_time_student(shifts, earliest_end_time_student);
+
+		marks += mark_all_intersected_students(shifts, latest_end_time_student);
+
+		committee.push_back(latest_end_time_student);
 	}
 }
 
@@ -221,4 +211,59 @@ bool intersects(student s1, student s2)
 		s1.begin_hours <= s2.end_hours) ||
 		(s1.end_hours <= s2.end_hours &&
 		s1.end_hours >= s2.begin_hours);
+}
+
+student get_earliest_end_time_student(vector<student> &shifts)
+{
+	unsigned int earliest_end_time_student_index = 0;
+	unsigned int earliest_end_time = 169;
+	for(student s : shifts)
+	{
+		if(!s.is_marked)
+		{
+			if(earliest_end_time > s.end_hours)
+			{
+				earliest_end_time_student_index = s.id-1;
+				earliest_end_time = s.end_hours;
+			}
+		}
+	}
+	return shifts.at(earliest_end_time_student_index);
+}
+
+student get_latest_end_time_student(vector<student> &shifts,
+	student earliest_end_time_student)
+{
+	unsigned int latest_end_time_student_index = 0;
+	unsigned int latest_end_time = 0;
+	for(student s : shifts)
+	{
+		if(intersects(s, earliest_end_time_student))
+		{
+			if(latest_end_time < s.end_hours)
+			{
+				latest_end_time_student_index = s.id-1;
+				latest_end_time = s.end_hours;
+			}
+		}
+	}
+	return shifts.at(latest_end_time_student_index);
+}
+
+unsigned int mark_all_intersected_students(vector<student> &shifts,
+	student latest_end_time_student)
+{
+	unsigned int marks = 0;
+	for(student s : shifts)
+	{
+		if(intersects(s, latest_end_time_student))
+		{
+			if(!s.is_marked)
+			{
+				++marks;
+				shifts[s.id-1].is_marked = true;
+			}
+		}
+	}
+	return marks;
 }
