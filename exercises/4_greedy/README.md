@@ -14,7 +14,7 @@
 	* **R**:
 		* **Source**: `q4.cpp`
 		* **Compile**: `make q4`
-		* **Run Book Example**: `./q4 < book_examples/q4.input`
+		* **Run Book Example**: `./q4 < examples/q4/book.input`
 
 	```C
 	#include <iostream>
@@ -86,17 +86,89 @@
 	```
 1. The wildly popular Spanish-language search engine El Goog needs to do a serious amount of computation every time it recompiles its index. Fortunately, the company has at its disposal a single large supercomputer, together with an essentially unlimited supply of high-end PCs. They’ve broken the overall computation into **n** distinct jobs, labeled `J1, J2,..., Jn`, which can be performed completely independently of one another. Each job consists of two stages: first it needs to be preprocessed on the supercomputer, and then it needs to be finished on one of the PCs. Let’s say that job **Ji** needs **pi** seconds of time on the supercomputer, followed by **fi** seconds of time on a PC. Since there are at least **n** PCs available on the premises, the finishing of the jobs can be performed fully in parallel—all the jobs can be processed at the same time. However, the supercomputer can only work on a single job at a time, so the system managers need to work out an order in which to feed the jobs to the supercomputer. As soon as the first job in order is done on the supercomputer, it can be handed off to a PC for finishing; at that point in time a second job can be fed to the supercomputer; when the second job is done on the supercomputer, it can proceed to a PC regardless of whether or not the first job is done (since the PCs work in parallel); and so on. Let’s say that a schedule is an ordering of the jobs for the supercomputer, and the completion time of the schedule is the earliest time at which all jobs will have finished processing on the PCs. This is an important quantity to minimize, since it determines how rapidly El Goog can generate a new index. Give a polynomial-time algorithm that finds a schedule with as small a completion time as possible.
 	* **R**:
+		* **Source**: `q7.cpp`
+		* **Compile**: `make q7`
+		* **Run First Example**: `./q7 < examples/q7/1.input`
+		* **Run Second Example**: `./q7 < examples/q7/2.input`
+
 	```C
-	printf("-");
+	#include <iostream>
+	#include <vector>
+	#include <algorithm>
+
+	using namespace std;
+
+	class job
+	{
+	public:
+		double p; // Time on the supercomputer
+		double f; // Time on a PC
+		job(double pi, double fi) : p(pi), f(fi) {}
+	};
+
+	void create_jobs(vector<job> &jobs);
+	void inform_completion_time(vector<job> &jobs, string name);
+	void create_optimal_schedule(vector<job> &jobs);
+
+	int main()
+	{
+		vector<job> jobs;
+		create_jobs(jobs);
+		inform_completion_time(jobs, "Current");
+
+		create_optimal_schedule(jobs);
+		inform_completion_time(jobs, "Optimal");
+
+		return 0;
+	}
+
+	void create_jobs(vector<job> &jobs)
+	{
+		cout << "Inform each job time on the supercomputer (p) ";
+		cout << "and time on a PC (f)" << endl;
+		double pi, fi;
+		while(cin >> pi >> fi)
+		{
+			jobs.push_back(job(pi, fi));
+		}
+	}
+
+	void inform_completion_time(vector<job> &jobs, string name)
+	{
+		double time_on_supercomputer = 0.0;
+		double completion_time = 0.0;
+		cout << endl << name << " schedule:" << endl;
+		for(job j : jobs)
+		{
+			cout << "> p: " << j.p << "; f:" << j.f << endl;
+			time_on_supercomputer += j.p;
+			double local_completion_time = time_on_supercomputer + j.f;
+			if(completion_time < local_completion_time)
+			{
+				completion_time = local_completion_time;
+			}
+		}
+		cout << name << " completion time is: " << completion_time << endl;
+	}
+
+	void create_optimal_schedule(vector<job> &jobs)
+	{
+		for(unsigned int i = 0; i < jobs.size()-1; ++i)
+		{
+			unsigned int greater_f_index = 0;
+			double greater_f = 0;
+			for(unsigned int j = i; j < jobs.size(); ++j)
+			{
+				if(greater_f < jobs.at(j).f)
+				{
+					greater_f = jobs.at(j).f;
+					greater_f_index = j;
+				}
+			}
+			swap(jobs[i], jobs[greater_f_index]);
+		}
+	}
 	```
-1. Suppose you have **n** video streams that need to be sent, one after another, over a communication link. Stream **i** consists of a total of **bi** bits that need to be sent, at a constant rate, over a period of **ti** seconds. You cannot send two streams at the same time, so you need to determine a schedule for the streams: an order in which to send them. Whichever order you choose, there cannot be any delays between the end of one stream and the start of the next. Suppose your schedule starts at time 0. We assume that all the values **bi** and **ti** are positive integers. Now, because you’re just one user, the link does not want you taking up too much bandwidth, so it imposes the following constraint, using a fixed parameter **r**: `(∗) For each natural number t > 0, the total number of bits you send over the time interval from 0 to t cannot exceed rt`. Note that this constraint is only imposed for time intervals that start at 0, not for time intervals that start at any other value. We say that a schedule is valid if it satisfies the constraint **(∗)** imposed by the link. **The Problem**: Given a set of **n** streams, each specified by its number of bits **bi** and its time duration **ti**, as well as the link parameter **r**, determine whether there exists a valid schedule. **Example**: Suppose we have `n = 3` streams, with `(b1, t1) = (2000, 1), (b2, t2) = (6000, 2), (b3, t3) = (2000, 1)`, and suppose the link’s parameter is `r = 5000`. Then the schedule that runs the streams in the order `1, 2, 3`, is valid, since the constraint **(∗)** is satisfied - `t = 1`: the whole first stream has been sent, and `2000 < 5000 · 1`; `t = 2`: half of the second stream has also been sent, and `2000 + 3000 < 5000 · 2`; Similar calculations hold for `t = 3` and `t = 4`.
-	1. Consider the following claim - **Claim**: There exists a valid schedule if and only if each stream **i** satisfies `bi ≤ rti`. Decide whether you think the claim is true or false, and give a proof of either the claim or its negation.
-		* **R**:
-	1. Give an algorithm that takes a set of **n** streams, each specified by its number of bits **bi** and its time duration **ti**, as well as the link parameter **r**, and determines whether there exists a valid schedule. The running time of your algorithm should be polynomial in `n`.
-		* **R**:
-		```C
-		printf("-");
-		```
 1. A small business—say, a photocopying service with a single large machine—faces the following scheduling problem. Each morning they get a set of jobs from customers. They want to do the jobs on their single machine in an order that keeps their customers happiest. Customer **i’s** job will take **ti** time to complete. Given a schedule (i.e., an ordering of the jobs), let **Ci** denote the finishing time of job **i**. For example, if job **j** is the first to be done, we would have `Cj = tj`; and if job **j** is done right after job **i**, we would have `Cj = Ci + tj`. Each customer **i** also has a given weight **wi** that represents his or her importance to the business. The happiness of customer **i** is expected to be dependent on the finishing time of **i’s** job. So the company decides that they want to order the jobs to minimize the _weighted sum_ of the completion times. Design an efficient algorithm to solve this problem. That is, you are given a set of **n** jobs with a processing time **ti** and a weight **wi** for each job. You want to order the jobs so as to minimize the _weighted sum_ of the completion times. **Example**: Suppose there are two jobs - the first takes time `t1 = 1` and has weight `w1 = 10`, while the second job takes time `t2 = 3` and has weight `w2 = 2`. Then doing job **1** first would yield a weighted completion time of `10 · 1 + 2 · 4 = 18`, while doing the second job first would yield the larger weighted completion time of `10 · 4 + 2 · 3 = 46`
 	* **R**:
 	```C
