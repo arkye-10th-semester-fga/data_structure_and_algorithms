@@ -238,8 +238,8 @@
 	```
 1. A small business—say, a photocopying service with a single large machine—faces the following scheduling problem. Each morning they get a set of jobs from customers. They want to do the jobs on their single machine in an order that keeps their customers happiest. Customer **i’s** job will take **ti** time to complete. Given a schedule (i.e., an ordering of the jobs), let **Ci** denote the finishing time of job **i**. For example, if job **j** is the first to be done, we would have `Cj = tj`; and if job **j** is done right after job **i**, we would have `Cj = Ci + tj`. Each customer **i** also has a given weight **wi** that represents his or her importance to the business. The happiness of customer **i** is expected to be dependent on the finishing time of **i’s** job. So the company decides that they want to order the jobs to minimize the _weighted sum_ of the completion times. Design an efficient algorithm to solve this problem. That is, you are given a set of **n** jobs with a processing time **ti** and a weight **wi** for each job. You want to order the jobs so as to minimize the _weighted sum_ of the completion times. **Example**: Suppose there are two jobs - the first takes time `t1 = 1` and has weight `w1 = 10`, while the second job takes time `t2 = 3` and has weight `w2 = 2`. Then doing job **1** first would yield a weighted completion time of `10 · 1 + 2 · 4 = 18`, while doing the second job first would yield the larger weighted completion time of `10 · 4 + 2 · 3 = 46`
 * **R**:
-	* **Source**: `q5.c`
-	* **Compile**: `make q5`
+	* **Source**: `q13.c`
+	* **Compile**: `make q13`
 	```C
 	#include <stdlib.h>
 	#include <stdio.h>
