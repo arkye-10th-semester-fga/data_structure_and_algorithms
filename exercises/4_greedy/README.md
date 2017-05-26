@@ -1,6 +1,6 @@
 **Aluno**: Jonathan Moraes (12/0122553)
 
-**Aluno**: <Laura>
+**Aluno**: Laura Martins (10/0033440)
 
 **Disciplina**: Estrutura de Dados e Algoritmos 2
 
