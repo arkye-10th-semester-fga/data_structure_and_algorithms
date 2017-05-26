@@ -237,9 +237,89 @@
 	}
 	```
 1. A small business—say, a photocopying service with a single large machine—faces the following scheduling problem. Each morning they get a set of jobs from customers. They want to do the jobs on their single machine in an order that keeps their customers happiest. Customer **i’s** job will take **ti** time to complete. Given a schedule (i.e., an ordering of the jobs), let **Ci** denote the finishing time of job **i**. For example, if job **j** is the first to be done, we would have `Cj = tj`; and if job **j** is done right after job **i**, we would have `Cj = Ci + tj`. Each customer **i** also has a given weight **wi** that represents his or her importance to the business. The happiness of customer **i** is expected to be dependent on the finishing time of **i’s** job. So the company decides that they want to order the jobs to minimize the _weighted sum_ of the completion times. Design an efficient algorithm to solve this problem. That is, you are given a set of **n** jobs with a processing time **ti** and a weight **wi** for each job. You want to order the jobs so as to minimize the _weighted sum_ of the completion times. **Example**: Suppose there are two jobs - the first takes time `t1 = 1` and has weight `w1 = 10`, while the second job takes time `t2 = 3` and has weight `w2 = 2`. Then doing job **1** first would yield a weighted completion time of `10 · 1 + 2 · 4 = 18`, while doing the second job first would yield the larger weighted completion time of `10 · 4 + 2 · 3 = 46`
-	* **R**:
+* **R**:
+	* **Source**: `q5.c`
+	* **Compile**: `make q5`
 	```C
-	printf("-");
+	#include <stdlib.h>
+	#include <stdio.h>
+	#include <string.h>
+	#include <math.h>
+	#include <time.h>
+
+	#define MAX 100
+	#define N 10
+
+
+	typedef struct _jobs{
+		int ttf; //time to finish
+		int priority;
+		int id;
+	}Jobs;
+
+
+	Jobs *init_jobs(){
+		Jobs *jobs;
+		jobs = (Jobs *) malloc(N * sizeof(Jobs));
+		return jobs;
+	}
+
+	void pop_jobs(Jobs * j){
+		int i;
+		srand(time(0));
+		for(i=0; i<N; i++){
+			j[i].ttf = rand() % MAX+1;
+			j[i].priority = rand() % MAX+1;
+			j[i].id = i+1;
+	    }
+	}
+
+	void print_jobs(Jobs * j){
+	    int i;
+	    for(i=0; i<N; i++)
+	        printf("Job: %d\n ttf: %d\n priority: %d\n---------------\n", j[i].id, j[i].ttf, j[i].priority);
+	}
+
+	void print_job(Jobs * j, int i){
+	    printf("Job: %d\n ttf: %d\n priority: %d\n---------------\n", j[i].id, j[i].ttf, j[i].priority);
+	}
+
+	void greedy_jobs(Jobs * j){
+	    int i;
+	    int size = N;
+	    int index = 0;
+	    double biggest = -1;
+
+	    while(size > 0){
+	        for(i=0; i<size; i++){
+	            if ((double)j[i].priority/j[i].ttf > biggest){
+	                index = i;
+	                biggest = (double)j[i].priority/j[i].ttf;
+	            }
+	        }
+	        print_job(j, index);
+	        remove_from_jobs_list(j, index, size);
+	        biggest = -1;
+	        size --;
+	    }
+	}
+
+	void remove_from_jobs_list(Jobs * j, int i, int n){
+	    j[i]=j[n-1];
+	}
+
+	int main(){
+	    Jobs *jobs = init_jobs();
+	    pop_jobs(jobs);
+	    printf("Original jobs list:\n\n");
+	    print_jobs(jobs);
+	    printf("\nOptimal Solution:\n\n");
+	    greedy_jobs(jobs);
+
+
+
+	    return 0;
+	}
 	```
 1. The manager of a large student union on campus comes to you with the following problem. She’s in charge of a group of **n** students, each of whom is scheduled to work one shift during the week. There are different jobs associated with these shifts (tending the main desk, helping with package delivery, rebooting cranky information kiosks, etc.), but we can view each shift as a single contiguous interval of time. There can be multiple shifts going on at once. She’s trying to choose a subset of these **n** students to form a supervising committee that she can meet with once a week. She considers such a committee to be complete if, for every student not on the committee, that student’s shift overlaps (at least partially) the shift of some student who is on the committee. In this way, each student’s performance can be observed by at least one person who’s serving on the committee. Give an efficient algorithm that takes the schedule of **n** shifts and produces a complete supervising committee containing as few students as possible. **Example**: Suppose `n = 3`, and the shifts are `Monday 4 P.M.–Monday 8 P.M., Monday 6 P.M.–Monday 10 P.M., Monday 9 P.M.–Monday 11 P.M.`. Then the smallest complete supervising committee would consist of just the second student, since the second shift overlaps both the first and the third.
 	* **R**:
