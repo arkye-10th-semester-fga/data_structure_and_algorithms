@@ -111,8 +111,6 @@ So they’d really like it if there were a way to compute all the forces
 Fj much more quickly, so as to keep up with the rate of the experiment.
 Help them out by designing an algorithm that computes all the forces
 Fj in O(n log n) time.
-
-
 	* **R**:
 		* **Source**: ``
 		* **Compile**: ``
