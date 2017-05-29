@@ -87,7 +87,6 @@ part is where they need your help. The total net force on particle j, by
 Coulomb’s Law, is equal to
 					Fj = SUM[i<j](Cqiqj)/(j-i)^2  - SUM[i>j](Cqiqj)/(j-i)^2
 They’ve written the following simple program to compute Fj for all j:
---------------------------------------------------------------------
 
 For j = 1, 2, . . . , n
 	Initialize Fj to 0
@@ -100,8 +99,6 @@ For j = 1, 2, . . . , n
 	Endfor
 	Output Fj
 Endfor
-
-----------------------------------------------------------------------
 
 It’s not hard to analyze the running time of this program: each
 invocation of the inner loop, over i, takes O(n) time, and this inner loop
@@ -124,7 +121,7 @@ Fj in O(n log n) time.
 
 	```
 
-	1. Hidden surface removal is a problem in computer graphics that scarcely
+1. Hidden surface removal is a problem in computer graphics that scarcely
 needs an introduction: when Woody is standing in front of Buzz, you
 should be able to see Woody but not Buzz; when Buzz is standing in
 front of Woody, . . . well, you get the idea.
