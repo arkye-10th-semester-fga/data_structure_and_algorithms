@@ -88,6 +88,7 @@ Coulomb’s Law, is equal to
 					Fj = SUM[i<j](Cqiqj)/(j-i)^2  - SUM[i>j](Cqiqj)/(j-i)^2
 They’ve written the following simple program to compute Fj for all j:
 
+```C
 For j = 1, 2, . . . , n
 	Initialize Fj to 0
 	For i = 1, 2, . . . , n
@@ -99,7 +100,7 @@ For j = 1, 2, . . . , n
 	Endfor
 	Output Fj
 Endfor
-
+```
 It’s not hard to analyze the running time of this program: each
 invocation of the inner loop, over i, takes O(n) time, and this inner loop
 is invoked O(n) times total, so the overall running time is O(n2).
@@ -130,7 +131,7 @@ nonvertical lines in the plane, labeled L1, . . . , Ln, with the ith line specif
 by the equation y = aix + bi. We will make the assumption that no three of
 the lines all meet at a single point. We say line Li is uppermost at a given
 x-coordinate x0 if its y-coordinate at x0 is greater than the y-coordinates
-of all the other lines at x0: aix0 + bi > ajx0 + bj for all j = i. We say line Li is
+of all the other lines at x0: aix0 + bi > ajx0 + bj for all j = i. We say line Li is
 visible if there is some x-coordinate at which it is uppermost—intuitively,
 some portion of it can be seen if you look down from “y=∞.”
 Give an algorithm that takes n lines as input and in O(n log n) time
