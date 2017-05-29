@@ -23,9 +23,126 @@
 	* **R**:
 		* **Source**: `q2.cpp`
 		* **Compile**: `make q2`
+		* **Run No Inversion Example**: `./q2 < examples/q2/no_inversion.input`
+			* Since `5 < 3*2` and `5 < 4*2`, there are no inversions.
+		* **Run One Inversion First Example**: `./q2 < examples/q2/one_inversion.input`
+			* Since `7 > 3*2` and `7 < 4*2`, there is only one inversion.
+		* **Run One Inversion Second Example**: `./q2 < examples/q2/one_inversion_2.input`
+			* Since `8 > 3*2` and `8 == 4*2`, there is only one inversion.
+		* **Run Two Inversions Example**: `./q2 < examples/q2/two_inversions.input`
+			* Since `9 > 3*2` and `9 < 4*2`, there are two inversions.
 
 	```C
-	Jonathan
+	#include <iostream>
+	#include <vector>
+
+	using namespace std;
+
+	#define ui unsigned int
+
+	void create_sequence(vector<ui> &sequence);
+	ui sort_and_count(vector<ui> &sequence, vector<ui>::iterator start,
+		vector<ui>::iterator finish);
+	ui merge_and_count(vector<ui>::iterator start, vector<ui>::iterator mid,
+		vector<ui>::iterator finish);
+
+	int main()
+	{
+		vector<ui> sequence;
+		create_sequence(sequence);
+
+		ui count = sort_and_count(sequence, begin(sequence), end(sequence));
+
+		cout << "Quantity of significant inversions: " << count << "." << endl;
+		cout << "Sorted List Based on Inversion Criteria:" << endl << "\t";
+		for(ui element : sequence)
+		{
+			cout << "[" << element << "]";
+		}
+		cout << endl;
+
+		return 0;
+	}
+
+	void create_sequence(vector<ui> &sequence)
+	{
+		const ui END_OF_INPUT = 0;
+		cout << "Insert a list of unique numbers." << endl;
+		cout << "End the insertion with " << END_OF_INPUT  << "." << endl;
+		bool creation_is_done = false;
+		while(!creation_is_done)
+		{
+			ui number = 0;
+			cin >> number;
+			if(number != END_OF_INPUT)
+			{
+				sequence.push_back(number);
+			}
+			else
+			{
+				creation_is_done = true;
+			}
+		}
+	}
+
+	ui sort_and_count(vector<ui> &sequence, vector<ui>::iterator start,
+		vector<ui>::iterator finish)
+	{
+		ui count = 0;
+		size_t length = distance(start, finish);
+		if(length > 1)
+		{
+			size_t middle = length/2;
+			vector<ui>::iterator mid = next(start, middle);
+			count += sort_and_count(sequence, start, mid);
+			count += sort_and_count(sequence, mid, finish);
+			count += merge_and_count(start, mid, finish);
+		}
+		return count;
+	}
+
+	ui merge_and_count(vector<ui>::iterator start, vector<ui>::iterator mid,
+		vector<ui>::iterator finish)
+	{
+		ui count = 0;
+		vector<ui> work_vector(start,finish);
+
+		vector<ui>::iterator work_start = begin(work_vector);
+		vector<ui>::iterator work_finish = end(work_vector);
+		vector<ui>::iterator work_mid = next(work_start, distance(start, mid));
+
+		vector<ui>::iterator left = work_start;
+		vector<ui>::iterator right = work_mid;
+		vector<ui>::iterator index = start;
+
+		while(left < work_mid && right < work_finish)
+		{
+			if(*left <= *right * 2)
+			{
+				*index = move(*left++);
+			}
+			else
+			{
+				*index = move(*right++);
+				count += distance(left, work_mid);
+			}
+			++index;
+		}
+
+		while(left < work_mid)
+		{
+			*index = move(*left++);
+			++index;
+		}
+
+		while(right < work_finish)
+		{
+			*index = move(*right++);
+			++index;
+		}
+
+		return count;
+	}
 	```
 1. Suppose you’re consulting for a bank that’s concerned about fraud detection, and they come to you with the following problem. They have a collection of **n** bank cards that they’ve confiscated, suspecting them of being used in fraud. Each bank card is a small plastic object, containing a magnetic stripe with some encrypted data, and it corresponds to a unique account in the bank. Each account can have many bank cards corresponding to it, and we’ll say that two bank cards are equivalent if they correspond to the same account. It’s very difficult to read the account number off a bank card directly, but the bank has a high-tech “equivalence tester” that takes two bank cards and, after performing some computations, determines whether they are equivalent. Their question is the following: among the collection of **n** cards, is there a set of more than `n/2` of them that are all equivalent to one another? Assume that the only feasible operations you can do with the cards are to pick two of them and plug them in to the equivalence tester. Show how to decide the answer to their question with only `O(n log n)` invocations of the equivalence tester.
 	* **R**:
