@@ -17,7 +17,115 @@
 		* **Compile**: `make q1`
 
 	```C
-	Laura
+	#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+#define min(a,b) \
+   ({ __typeof__ (a) _a = (a); \
+       __typeof__ (b) _b = (b); \
+     _a < _b ? _a : _b; })
+
+int * declareArray(int n){
+    int * x;
+    x = malloc(n * (sizeof(int)));
+    return x;
+}
+
+int inputSize(){
+    int a=0, b=0, x;
+    FILE * fileA = fopen( "./examples/q1/inputA.txt" , "r");
+    FILE * fileB = fopen( "./examples/q1/inputB.txt" , "r");
+
+    if(fileA == NULL || fileB == NULL){
+        printf("\nERROR: FILE_FAILED_TO_OPEN");
+        exit(0);
+    }
+
+    while(!feof(fileA)){
+        fscanf(fileA, "%d ", &x);
+        a++;
+    }
+
+    while(!feof(fileB)){
+        fscanf(fileB, "%d ", &x);
+        b++;
+    }
+
+    if(a == 0 || b == 0 || a!=b){
+        printf("\nERROR: FILE_INPUT_SIZE_INVALID");
+        exit(0);
+    }
+    fclose(fileA);
+    fclose(fileB);
+
+    return a;
+}
+
+
+void scanInput(int * a, int * b, int n){
+    int i;
+
+    FILE * fileA = fopen( "./examples/q1/inputA.txt" , "r");
+    FILE * fileB = fopen( "./examples/q1/inputB.txt" , "r");
+
+    if(fileA == NULL || fileB == NULL){
+        printf("\nERROR: FILE_FAILED_TO_OPEN");
+        exit(0);
+    }
+
+    for(i=0; i<n; i++){
+        fscanf(fileA, "%d ", &a[i]);
+        fscanf(fileB, "%d ", &b[i]);
+    }
+
+    fclose(fileA);
+    fclose(fileB);
+}
+
+void printArray(int * x, int n){
+    int i;
+    for (i=0; i<n; i++) printf("%d ", x[i]);
+    printf("\n");
+}
+
+int median(int n, int ai, int bi, int * A, int * B){
+    int k = ceil(n/2.0);
+    int i;
+
+    if(n==1){
+        return min(A[ai], B[bi]);
+    }
+    if (A[ai+k] < B[bi + k]){
+        if(n%2==0 && n!=2){
+            return median(k+1, ai+k-1, bi, A, B);
+        }else if(n/2!=k){
+            return median(k, ai+k-1, bi, A, B);
+        }else{
+            return median(k, ai+k, bi, A, B);
+        }
+    }else{
+        if(n%2==0 && n!=2){
+            return median(k+1, ai, bi+k-1, A, B);
+        }else if(n/2!=k){
+            return median(k, ai, bi+k-1, A, B);
+        }else{
+            return median(k, ai, bi+k, A, B);
+        }
+    }
+}
+
+int main(){
+    int size = inputSize();
+
+    int * A = declareArray(size);
+    int * B = declareArray(size);
+    scanInput(A, B, size);
+
+    int answer = median(size, 0, 0, A, B);
+    printf("MEDIAN: %d", answer);
+    return 0;
+}
 	```
 1. Recall the problem of finding the number of inversions. As in the text, we are given a sequence of **n** numbers `a1, . . . , an`, which we assume are all distinct, and we define an inversion to be a pair `i < j` such that `ai > aj`. We motivated the problem of counting inversions as a good measure of how different two orderings are. However, one might feel that this measure is too sensitive. Let’s call a pair a significant inversion if `i < j` and `ai > 2aj`. Give an `O(n log n)` algorithm to count the number of significant inversions between two orderings.
 	* **R**:
@@ -146,12 +254,23 @@
 	```
 1. Suppose you’re consulting for a bank that’s concerned about fraud detection, and they come to you with the following problem. They have a collection of **n** bank cards that they’ve confiscated, suspecting them of being used in fraud. Each bank card is a small plastic object, containing a magnetic stripe with some encrypted data, and it corresponds to a unique account in the bank. Each account can have many bank cards corresponding to it, and we’ll say that two bank cards are equivalent if they correspond to the same account. It’s very difficult to read the account number off a bank card directly, but the bank has a high-tech “equivalence tester” that takes two bank cards and, after performing some computations, determines whether they are equivalent. Their question is the following: among the collection of **n** cards, is there a set of more than `n/2` of them that are all equivalent to one another? Assume that the only feasible operations you can do with the cards are to pick two of them and plug them in to the equivalence tester. Show how to decide the answer to their question with only `O(n log n)` invocations of the equivalence tester.
 	* **R**:
-		* **Source**: `q3.c`
-		* **Compile**: `make q3`
+A solução é: Dividir os n cartões em duas metades de tamanho k = n/2. Com a primeira metade:
 
-	```C
-	Laura
-	```
+Pegar um cartão do set (de k/2 elementos). Comparar todos os outros com este cartão e separar em grupos:
+1 - Correspondentes
+2 - Não correspondentes
+Se o tamanho do grupo 1 for igual ou maior a k/2, chegamos ao fim do algorítmo e a resposta é: sim.
+
+Caso contrário, o novo set de cartões é o grupo 2. Pegamos um cartão deste grupo e fazemos a divisão em grupos novamente:
+3 - Correspondente
+4 - Não correspondente.
+
+Se o tamanho do grupo 3 for igual ou maior a k/2, chegamos ao fim do algorítmo e a resposta é: sim.
+Caso contrário, temos dois cenários:
+* Se o grupo 3 + o grupo 1 for maior que k/2, chegamos ao fim do algorítmo (pois já separamos mais do que a metade de cartões e eles não são todos correspondentes) e a resposta é: não.
+* Se a afirmativa passada não for verdadeira, o novo set de cartões é o grupo 4. Pegamos um cartão deste grupo e fazemos a divisão em grupos novamente, até chegar ao fim do augoritmo.
+
+Se a resposta para a primeria metade for sim, pegar este cartão que representa a maioria da primeira metade e rodar contra os da segunda metade. Se o set de cartões correspondentes for >= n/2, a resposta é sim. Caso contrário, a resposta é não.
 
 1. You’ve been working with some physicists who need to study, as part of their experimental design, the interactions among large numbers of very small charged particles. Basically, their setup works as follows. They have an inert lattice structure, and they use this for placing charged particles at regular spacing along a straight line. Thus we can model their structure as consisting of the points `{1, 2, 3, . . . , n}` on the real line; and at each of these points **j**, they have a particle with charge **qj**. (Each charge can be either positive or negative.) They want to study the **total force** on each particle, by measuring it and then comparing it to a computational prediction. This computational part is where they need your help. The total net force on particle **j**, by **Coulomb’s Law**, is equal to `Fj = SUM[i<j](Cqiqj)/(j-i)^2  - SUM[i>j](Cqiqj)/(j-i)^2`.
 	* They’ve written the following simple program to compute **Fj** for all **j**:
