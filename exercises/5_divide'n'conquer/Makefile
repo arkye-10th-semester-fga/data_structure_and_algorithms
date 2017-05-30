@@ -7,7 +7,7 @@ Q2_CODE = $(Q2).cpp
 Q3 = q3
 Q3_CODE = $(Q3).c
 Q4 = q4
-Q4_CODE = $(Q4).c
+Q4_CODE = $(Q4).cpp
 
 # Compilation Settings
 FLAGS_C = -O2 -lm -Wall
