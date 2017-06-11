@@ -2,7 +2,7 @@
 
 Q1 = q1c
 Q1_CODE = $(Q1).cpp
-Q2 = q2
+Q2 = q2b
 Q2_CODE = $(Q2).cpp
 Q6 = q6
 Q6_CODE = $(Q6).cpp
@@ -20,7 +20,7 @@ COMPILE_Q6 = g++ $(FLAGS_CPP) $(Q6_CODE) -o $(Q6)
 COMPILE_Q7 = g++ $(FLAGS_CPP) $(Q7_CODE) -o $(Q7)
 COMPILE_Q9 = g++ $(FLAGS_CPP) $(Q9_CODE) -o $(Q9)
 
-.PHONY: all q1c q2 q6 q7 q9 clean
+.PHONY: all $(Q1) $(Q2) $(Q6) $(Q7) $(Q9) clean
 
 all:
 	@make q1c --always-make --no-print-directory
@@ -29,19 +29,19 @@ all:
 	@make q7 --always-make --no-print-directory
 	@make q9 --always-make --no-print-directory
 
-q1c: q1c.cpp
+$(Q1): $(Q1_CODE)
 	$(COMPILE_Q1)
 
-q2: q2.cpp
+$(Q2): $(Q2_CODE)
 	$(COMPILE_Q2)
 
-q6: q6.cpp
+$(Q6): $(Q6_CODE)
 	$(COMPILE_Q6)
 
-q7: q7.cpp
+$(Q7): $(Q7_CODE)
 	$(COMPILE_Q7)
 
-q9: q9.cpp
+$(Q9): $(Q9_CODE)
 	$(COMPILE_Q9)
 
 clean:
