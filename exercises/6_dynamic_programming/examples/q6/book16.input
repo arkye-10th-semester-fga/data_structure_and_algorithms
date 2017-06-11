@@ -1,0 +1,31 @@
+16
+Call me Ishmael.
+Some years ago,
+never mind how long precisely,
+having little or no money in my purse,
+and nothing particular to interest me on shore,
+I thought I would sail about a little
+and see the watery part of the world.
+END
+
+Call me Ishmael. [16]
+Some years ago, [15] -> 1
+never mind how [14] -> 4
+long precisely, [15] -> 1
+having little [13] -> 9
+or no money [11] -> 25
+in my purse, [12] -> 16
+and nothing [11] -> 25
+particular to [13] -> 9
+interest me [11] -> 25
+on shore, I [11] -> 25
+thought I would [15] -> 1
+sail about a [12] -> 16
+little and see [14] -> 4
+the watery part [15] -> 1
+of the world. [13] -> 9
+
+Slack:
+1 + 4 + 1 + 9 + 25 +
+16 + 25 + 9 + 25 +
+25 + 1 + 16 + 4 + 1 + 9 = 171
